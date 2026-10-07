@@ -1,0 +1,322 @@
+@model nanay.Models.MemorialViewModel
+@{
+    ViewData["Title"] = $"{Model.Settings.AuntName} — In Loving Memory";
+}
+
+<div class="memorial-container" id="memorial-app">
+
+    <!-- PASSWORD UNLOCK MODAL (IF PROTECTED) -->
+    @if (!Model.IsUnlocked)
+    {
+        <div class="unlock-overlay" id="unlockOverlay">
+            <div class="unlock-box">
+                <div class="unlock-icon">✦</div>
+                <h2 class="unlock-title">Private Family Memorial</h2>
+                <p class="unlock-desc">This memorial is dedicated to the loving memory of @Model.Settings.AuntName. Please enter the family access password to enter.</p>
+                <form id="unlockForm" onsubmit="handleUnlock(event)">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <input type="password" id="accessPassword" class="unlock-input" placeholder="Enter password" required autocomplete="off" />
+                    </div>
+                    <div id="unlockError" class="unlock-error" style="display:none;"></div>
+                    <button type="submit" class="unlock-btn">Enter With Love</button>
+                </form>
+            </div>
+        </div>
+    }
+
+    <!-- 01. OPENING EXPERIENCE (NFC TAP & SILENCE) -->
+    <section class="section-opening" id="section-opening">
+        <div class="opening-content">
+            <p class="opening-line line-1">@Model.Settings.OpeningQuote1</p>
+            <p class="opening-line line-2">@Model.Settings.OpeningQuote2</p>
+            
+            <div class="opening-name-block">
+                <span class="opening-divider">✦</span>
+                <h1 class="opening-name">@Model.Settings.AuntName</h1>
+                <p class="opening-subtitle">@Model.Settings.Subtitle</p>
+            </div>
+
+            <div class="scroll-indicator" id="scrollPrompt">
+                <span class="scroll-text">Gently scroll to remember</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02. HERO SECTION -->
+    <section class="section-hero" id="section-hero">
+        <div class="hero-parallax-bg" style="background-image: url('@Model.Settings.HeroImage')"></div>
+        <div class="hero-image-wrapper">
+            <img src="@Model.Settings.HeroImage" alt="@Model.Settings.AuntName" class="hero-portrait" id="heroPortrait" loading="eager" />
+            <div class="hero-image-vignette"></div>
+        </div>
+
+        <div class="hero-text-block">
+            <p class="hero-quote-1">@Model.Settings.HeroQuote1</p>
+            <p class="hero-quote-2">@Model.Settings.HeroQuote2</p>
+        </div>
+    </section>
+
+    <!-- 03. CHAPTER 1 — HER -->
+    <section class="section-chapter section-chapter-1" id="chapter-1">
+        <div class="chapter-header">
+            <span class="chapter-num">CHAPTER I</span>
+            <h2 class="chapter-title">HER</h2>
+            <div class="chapter-quote-box">
+                <p class="chapter-quote">@Html.Raw(Model.Settings.Chapter1Quote.Replace("\n", "<br/>"))</p>
+            </div>
+        </div>
+
+        @if (Model.Chapter1Photos.Any())
+        {
+            <div class="chapter-portrait-showcase">
+                @foreach (var photo in Model.Chapter1Photos)
+                {
+                    <div class="portrait-card" data-parallax="0.15">
+                        <div class="card-image-frame">
+                            <img src="@photo.ImagePath" alt="@photo.AltText" class="memorial-img" loading="lazy" />
+                        </div>
+                        @if (!string.IsNullOrEmpty(photo.Caption))
+                        {
+                            <div class="card-caption-block">
+                                <span class="photo-date">@photo.MemoryDate</span>
+                                <p class="photo-caption">@photo.Caption</p>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <!-- 04. CHAPTER 2 — THE MOMENTS (VERTICAL PARALLAX GALLERY) -->
+    <section class="section-chapter section-chapter-2" id="chapter-2">
+        <div class="chapter-header">
+            <span class="chapter-num">CHAPTER II</span>
+            <h2 class="chapter-title">THE MOMENTS</h2>
+            <div class="chapter-quote-box">
+                <p class="chapter-quote">@Html.Raw(Model.Settings.Chapter2Quote.Replace("\n", "<br/>"))</p>
+            </div>
+        </div>
+
+        <div class="moments-vertical-stream">
+            @{
+                var moments = Model.Chapter2Photos.Any() ? Model.Chapter2Photos : Model.AllPhotos.Skip(1).Take(3).ToList();
+                var index = 0;
+            }
+            @foreach (var item in moments)
+            {
+                var alignmentClass = (index % 2 == 0) ? "align-left" : "align-right";
+                <div class="moment-item @alignmentClass" data-parallax-speed="@(index % 2 == 0 ? "0.2" : "0.3")">
+                    <div class="moment-frame">
+                        <img src="@item.ImagePath" alt="@item.Caption" class="moment-img" loading="lazy" />
+                        <div class="moment-overlay"></div>
+                    </div>
+                    <div class="moment-info">
+                        @if (!string.IsNullOrEmpty(item.MemoryDate))
+                        {
+                            <span class="moment-date">@item.MemoryDate</span>
+                        }
+                        @if (!string.IsNullOrEmpty(item.Location))
+                        {
+                            <span class="moment-location">📍 @item.Location</span>
+                        }
+                        <p class="moment-caption">@item.Caption</p>
+                    </div>
+                </div>
+                index++;
+            }
+        </div>
+    </section>
+
+    <!-- 05. CHAPTER 3 — THE PEOPLE SHE LOVED (FEATURE & LAYERED PARALLAX) -->
+    <section class="section-chapter section-chapter-3" id="chapter-3">
+        <div class="chapter-header">
+            <span class="chapter-num">CHAPTER III</span>
+            <h2 class="chapter-title">THE PEOPLE SHE LOVED</h2>
+            <div class="chapter-quote-box">
+                <p class="chapter-quote quote-line-1">@Model.Settings.Chapter3Quote1</p>
+                <p class="chapter-quote quote-line-2">@Model.Settings.Chapter3Quote2</p>
+            </div>
+        </div>
+
+        @{
+            var familyPhotos = Model.Chapter3Photos.Any() ? Model.Chapter3Photos : Model.AllPhotos.TakeLast(5).ToList();
+            var reunionPhoto = familyPhotos.FirstOrDefault(p => p.ImagePath.Contains("family-gathering"));
+            var otherFamilyPhotos = familyPhotos.Where(p => p != reunionPhoto).ToList();
+        }
+
+        <!-- Wide Family Gathering Feature Card -->
+        @if (reunionPhoto != null)
+        {
+            <div class="family-panorama-card">
+                <div class="panorama-frame">
+                    <img src="@reunionPhoto.ImagePath" alt="@reunionPhoto.Caption" class="panorama-img" loading="lazy" />
+                </div>
+                <div class="panorama-caption-block">
+                    <span class="photo-date">@reunionPhoto.MemoryDate</span>
+                    <p class="panorama-caption">@reunionPhoto.Caption</p>
+                </div>
+            </div>
+        }
+
+        <div class="layered-photos-stage" id="layeredStage">
+            @{
+                var layerIdx = 1;
+            }
+            @foreach (var p in otherFamilyPhotos)
+            {
+                <div class="layer-card layer-@layerIdx" data-depth="@(layerIdx * 0.2)">
+                    <div class="layer-image-wrapper">
+                        <img src="@p.ImagePath" alt="@p.Caption" class="layer-img" loading="lazy" />
+                    </div>
+                    @if (!string.IsNullOrEmpty(p.Caption))
+                    {
+                        <div class="layer-meta">
+                            <span class="layer-date">@p.MemoryDate</span>
+                            <p class="layer-text">@p.Caption</p>
+                        </div>
+                    }
+                </div>
+                layerIdx++;
+            }
+        </div>
+    </section>
+
+    <!-- 06. PERSONAL MEMORIES ("Things I Will Always Remember") -->
+    <section class="section-memories" id="section-memories">
+        <div class="memories-header">
+            <span class="memories-badge">TREASURED REFLECTIONS</span>
+            <h2 class="memories-title">Things I Will Always Remember</h2>
+            <p class="memories-subtitle">The quiet moments, the laughter, and the warmth that live in our minds forever.</p>
+        </div>
+
+        <div class="memories-stream">
+            @foreach (var memory in Model.Memories)
+            {
+                <div class="memory-card-reveal">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-header">
+                            <span class="memory-tag">@memory.Category</span>
+                            <span class="memory-glyph">✦</span>
+                        </div>
+                        <h3 class="memory-item-title">@memory.Title</h3>
+                        <p class="memory-item-content">@memory.Content</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- 07. PHOTO REVEAL EFFECT (EMERGING FROM ETHEREAL MIST) -->
+    <section class="section-reveal" id="section-reveal">
+        <div class="reveal-backdrop"></div>
+        <div class="reveal-container">
+            <p class="reveal-pre-text">@Model.Settings.RevealQuote1</p>
+            
+            <div class="reveal-image-container" id="revealImageContainer">
+                <img src="@Model.Settings.RevealImage" alt="Unspoken precious memory" class="reveal-photo" id="revealPhoto" loading="lazy" />
+                <div class="reveal-shroud" id="revealShroud"></div>
+            </div>
+
+            <p class="reveal-post-text">@Model.Settings.RevealQuote2</p>
+        </div>
+    </section>
+
+    <!-- 08. HER VOICE / MUSIC (AUDIO SECTION — 500 MILES) -->
+    @if (Model.Settings.EnableMusic && !string.IsNullOrEmpty(Model.Settings.AudioPath))
+    {
+        <section class="section-audio" id="section-audio">
+            <div class="audio-container">
+                <div class="audio-icon-glow">
+                    <span class="audio-pulse-ring"></span>
+                    <button class="audio-toggle-btn" id="audioToggleBtn" aria-label="Play 500 Miles">
+                        <svg class="play-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        <svg class="pause-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="audio-text-wrap">
+                    <span class="audio-tag">HER FAVORITE SONG</span>
+                    <h3 class="audio-title">@Model.Settings.AudioTitle</h3>
+                    <p class="audio-prompt">
+                        @Model.Settings.AudioPromptText
+                    </p>
+                </div>
+
+                <!-- Waveform Visualizer simulation -->
+                <div class="waveform-bars" id="waveformBars" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+
+                <audio id="memorialAudio" preload="none" src="@Model.Settings.AudioPath"></audio>
+            </div>
+        </section>
+    }
+
+    <!-- 09. LETTER TO HER -->
+    <section class="section-letter" id="section-letter">
+        <div class="letter-scroll-wrapper">
+            <div class="letter-header">
+                <span class="letter-seal">✦</span>
+                <h2 class="letter-title">@Model.Settings.LetterTitle</h2>
+            </div>
+
+            <div class="letter-paper">
+                <p class="letter-paragraph letter-p1">@Model.Settings.LetterParagraph1</p>
+                <p class="letter-paragraph letter-p2">@Model.Settings.LetterParagraph2</p>
+                <p class="letter-paragraph letter-p3">@Model.Settings.LetterParagraph3</p>
+
+                <div class="letter-signoff">
+                    <p class="signoff-line line-1">@Model.Settings.LetterClosing1</p>
+                    <p class="signoff-line line-2">@Model.Settings.LetterClosing2</p>
+                    <p class="signoff-line line-3">@Model.Settings.LetterClosing3</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. FINAL PHOTO -->
+    <section class="section-final-photo" id="section-final-photo">
+        <div class="final-photo-wrapper">
+            <img src="@Model.Settings.FinalImage" alt="In eternal memory" class="final-photo-img" loading="lazy" />
+            <div class="final-photo-gradient"></div>
+        </div>
+
+        <div class="final-quotes-wrapper">
+            <p class="final-quote q1">@Model.Settings.FinalQuote1</p>
+            <p class="final-quote q2">@Model.Settings.FinalQuote2</p>
+            <p class="final-quote q3">@Model.Settings.FinalQuote3</p>
+        </div>
+    </section>
+
+    <!-- 11. FINAL GOODBYE & DEDICATION FOOTER -->
+    <section class="section-goodbye" id="section-goodbye">
+        <div class="goodbye-content">
+            <div class="goodbye-cross">✦</div>
+            <h2 class="goodbye-name">@Model.Settings.AuntName</h2>
+            <p class="goodbye-dates">@Model.Settings.BirthDate &mdash; @Model.Settings.PassingDate</p>
+            <p class="goodbye-tribute">Forever in our hearts.</p>
+
+            <div class="goodbye-candle">
+                <div class="flame"></div>
+                <div class="candle-base"></div>
+            </div>
+
+            <div class="goodbye-spacer"></div>
+
+            <!-- CLEAN WEBSITE FOOTER (NO ADMIN LOGIN) -->
+            <footer class="memorial-site-footer">
+                <div class="footer-symbol">✦</div>
+                <p class="footer-dedication">Lovingly created and remembered by her family & loved ones</p>
+                <p class="footer-blessing">"Those we love don't go away, they walk beside us every day."</p>
+            </footer>
+        </div>
+    </section>
+
+</div>

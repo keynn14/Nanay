@@ -1,0 +1,39 @@
+@model nanay.Models.AdminLoginViewModel
+@{
+    ViewData["Title"] = "Memorial Management — Sign In";
+    Layout = "_Layout";
+}
+
+<div class="admin-login-container">
+    <div class="admin-login-card">
+        <div class="admin-login-header">
+            <span class="admin-badge">PRIVATE ACCESS</span>
+            <h1 class="admin-login-title">Memorial Administration</h1>
+            <p class="admin-login-subtitle">Manage photographs, memories, letters, and settings for the memorial website.</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="admin-alert admin-alert-danger">
+                @Model.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Login" method="post" class="admin-login-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <div class="admin-form-group">
+                <label for="Password" class="admin-label">Administrator Password</label>
+                <input type="password" asp-for="Password" class="admin-input" placeholder="Enter password (default: nanay2026)" required autofocus />
+                <span asp-validation-for="Password" class="admin-field-validation"></span>
+            </div>
+
+            <button type="submit" class="admin-btn-primary">Unlock Dashboard</button>
+        </form>
+
+        <div class="admin-login-footer">
+            <a href="/" class="admin-back-link">← Return to Memorial</a>
+        </div>
+    </div>
+</div>

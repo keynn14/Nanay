@@ -1,0 +1,439 @@
+@model nanay.Models.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Memorial Management Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="admin-dashboard-layout">
+    <!-- Top Navigation -->
+    <header class="admin-navbar">
+        <div class="admin-nav-brand">
+            <span class="brand-glyph">✦</span>
+            <div class="brand-text">
+                <span class="brand-name">@Model.Settings.AuntName</span>
+                <span class="brand-tag">Memorial Control Panel</span>
+            </div>
+        </div>
+
+        <div class="admin-nav-actions">
+            <a href="/memorial/@Model.Settings.MemorialSlug" target="_blank" class="admin-btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                View Live Memorial
+            </a>
+            <form asp-action="Logout" method="post" class="logout-form">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="admin-btn-logout">Sign Out</button>
+            </form>
+        </div>
+    </header>
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="admin-toast success">
+            ✦ @TempData["StatusMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="admin-toast error">
+            ⚠️ @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <!-- NFC Helper Card -->
+    <div class="nfc-card-banner">
+        <div class="nfc-banner-content">
+            <span class="nfc-icon">📡</span>
+            <div class="nfc-details">
+                <h3 class="nfc-title">NFC Card URL</h3>
+                <p class="nfc-url" id="nfcUrlDisplay">@Model.AppBaseUrl/memorial/@Model.Settings.MemorialSlug</p>
+                <p class="nfc-hint">Write this exact URL to your physical NFC card or tag. When tapped with any smartphone, it instantly opens the memorial experience.</p>
+            </div>
+        </div>
+        <button class="admin-btn-copy" onclick="copyNfcUrl('@Model.AppBaseUrl/memorial/@Model.Settings.MemorialSlug')">
+            Copy NFC Link
+        </button>
+    </div>
+
+    <!-- Admin Tabs -->
+    <div class="admin-tabs">
+        <button class="tab-btn active" onclick="showTab('tab-photos')">Photographs (@Model.Photos.Count)</button>
+        <button class="tab-btn" onclick="showTab('tab-memories')">Personal Memories (@Model.Memories.Count)</button>
+        <button class="tab-btn" onclick="showTab('tab-letter')">Letter to Her</button>
+        <button class="tab-btn" onclick="showTab('tab-audio')">Audio & Music</button>
+        <button class="tab-btn" onclick="showTab('tab-settings')">General Settings</button>
+    </div>
+
+    <!-- TAB 1: PHOTOS MANAGEMENT -->
+    <div id="tab-photos" class="tab-pane active">
+        <div class="admin-pane-header">
+            <div>
+                <h2 class="pane-title">Memorial Photographs</h2>
+                <p class="pane-desc">Upload, reorder, assign chapters, and write captions for photographs.</p>
+            </div>
+            <button class="admin-btn-accent" onclick="document.getElementById('uploadModal').style.display='flex'">+ Upload New Photo</button>
+        </div>
+
+        <div class="admin-photo-grid">
+            @foreach (var photo in Model.Photos)
+            {
+                <div class="admin-photo-card">
+                    <div class="photo-thumbnail-wrap">
+                        <img src="@photo.ImagePath" alt="@photo.Caption" class="admin-thumb" />
+                        <span class="photo-chapter-badge">@photo.Chapter</span>
+                        @if (photo.IsHero) { <span class="badge-hero">Hero</span> }
+                        @if (photo.IsFinalPhoto) { <span class="badge-final">Final</span> }
+                    </div>
+                    <div class="admin-photo-body">
+                        <p class="photo-caption-text">@(string.IsNullOrEmpty(photo.Caption) ? "No caption" : photo.Caption)</p>
+                        <div class="photo-meta-tags">
+                            <span class="meta-tag">📅 @(string.IsNullOrEmpty(photo.MemoryDate) ? "Undated" : photo.MemoryDate)</span>
+                            <span class="meta-tag">📍 @(string.IsNullOrEmpty(photo.Location) ? "Unspecified" : photo.Location)</span>
+                        </div>
+                    </div>
+                    <div class="admin-photo-actions">
+                        <form asp-action="DeletePhoto" method="post" onsubmit="return confirm('Are you sure you want to delete this photograph?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@photo.Id" />
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- TAB 2: PERSONAL MEMORIES -->
+    <div id="tab-memories" class="tab-pane">
+        <div class="admin-pane-header">
+            <div>
+                <h2 class="pane-title">"Things I Will Always Remember"</h2>
+                <p class="pane-desc">Add cherished memories, words of wisdom, funny moments, or lessons.</p>
+            </div>
+            <button class="admin-btn-accent" onclick="document.getElementById('addMemoryModal').style.display='flex'">+ Add Memory</button>
+        </div>
+
+        <div class="admin-memories-list">
+            @foreach (var memory in Model.Memories)
+            {
+                <div class="admin-memory-item">
+                    <div class="memory-item-left">
+                        <span class="memory-tag-badge">@memory.Category</span>
+                        <h4 class="memory-title-text">@memory.Title</h4>
+                        <p class="memory-content-text">@memory.Content</p>
+                    </div>
+                    <div class="memory-item-right">
+                        <form asp-action="DeleteMemory" method="post" onsubmit="return confirm('Remove this memory entry?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@memory.Id" />
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- TAB 3: LETTER TO HER -->
+    <div id="tab-letter" class="tab-pane">
+        <form asp-action="UpdateSettings" method="post" class="admin-form-panel">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Settings.AuntName" />
+            <input type="hidden" asp-for="Settings.MemorialSlug" />
+            <input type="hidden" asp-for="Settings.Subtitle" />
+            <input type="hidden" asp-for="Settings.BirthDate" />
+            <input type="hidden" asp-for="Settings.PassingDate" />
+            <input type="hidden" asp-for="Settings.HeroImage" />
+            <input type="hidden" asp-for="Settings.FinalImage" />
+            <input type="hidden" asp-for="Settings.AudioPath" />
+            <input type="hidden" asp-for="Settings.AdminPassword" />
+
+            <div class="admin-pane-header">
+                <div>
+                    <h2 class="pane-title">"If I Could Tell You One More Thing..."</h2>
+                    <p class="pane-desc">Write your personal letter to her. It will be rendered as a slow, elegant handwritten tribute.</p>
+                </div>
+                <button type="submit" class="admin-btn-primary">Save Letter</button>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Letter Title</label>
+                <input type="text" asp-for="Settings.LetterTitle" class="admin-input" />
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Paragraph 1 (The Silence & Presence)</label>
+                <textarea asp-for="Settings.LetterParagraph1" class="admin-textarea" rows="3"></textarea>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Paragraph 2 (Her Love & Kindness)</label>
+                <textarea asp-for="Settings.LetterParagraph2" class="admin-textarea" rows="3"></textarea>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Paragraph 3 (Her Legacy & Memory)</label>
+                <textarea asp-for="Settings.LetterParagraph3" class="admin-textarea" rows="3"></textarea>
+            </div>
+
+            <div class="admin-grid-3">
+                <div>
+                    <label class="admin-label">Closing Line 1</label>
+                    <input type="text" asp-for="Settings.LetterClosing1" class="admin-input" />
+                </div>
+                <div>
+                    <label class="admin-label">Closing Line 2</label>
+                    <input type="text" asp-for="Settings.LetterClosing2" class="admin-input" />
+                </div>
+                <div>
+                    <label class="admin-label">Closing Line 3</label>
+                    <input type="text" asp-for="Settings.LetterClosing3" class="admin-input" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- TAB 4: AUDIO & MUSIC -->
+    <div id="tab-audio" class="tab-pane">
+        <form asp-action="UploadAudio" method="post" enctype="multipart/form-data" class="admin-form-panel">
+            @Html.AntiForgeryToken()
+            <div class="admin-pane-header">
+                <div>
+                    <h2 class="pane-title">Audio & Voice Recording</h2>
+                    <p class="pane-desc">Upload a favorite song or voice clip. (Visitors press play willingly on mobile browsers).</p>
+                </div>
+                <button type="submit" class="admin-btn-primary">Save Audio Settings</button>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-checkbox-label">
+                    <input type="checkbox" name="EnableMusic" value="true" @(Model.Settings.EnableMusic ? "checked" : "") />
+                    <span>Enable Audio Section on Memorial</span>
+                </label>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Current Audio File</label>
+                <p class="admin-current-file">@Model.Settings.AudioPath</p>
+                <input type="file" name="AudioFile" class="admin-input-file" accept="audio/*" />
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Audio Title</label>
+                <input type="text" name="AudioTitle" value="@Model.Settings.AudioTitle" class="admin-input" />
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-checkbox-label">
+                    <input type="checkbox" name="IsVoiceRecording" value="true" @(Model.Settings.IsVoiceRecording ? "checked" : "") />
+                    <span>This is a real Voice Recording (changes prompt to "A voice we wish we could hear one more time")</span>
+                </label>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Music Prompt Text</label>
+                <input type="text" name="AudioPromptText" value="@Model.Settings.AudioPromptText" class="admin-input" />
+            </div>
+        </form>
+    </div>
+
+    <!-- TAB 5: GENERAL SETTINGS -->
+    <div id="tab-settings" class="tab-pane">
+        <form asp-action="UpdateSettings" method="post" class="admin-form-panel">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Settings.LetterTitle" />
+            <input type="hidden" asp-for="Settings.LetterParagraph1" />
+            <input type="hidden" asp-for="Settings.LetterParagraph2" />
+            <input type="hidden" asp-for="Settings.LetterParagraph3" />
+            <input type="hidden" asp-for="Settings.LetterClosing1" />
+            <input type="hidden" asp-for="Settings.LetterClosing2" />
+            <input type="hidden" asp-for="Settings.LetterClosing3" />
+            <input type="hidden" asp-for="Settings.AudioPath" />
+            <input type="hidden" asp-for="Settings.EnableMusic" />
+
+            <div class="admin-pane-header">
+                <div>
+                    <h2 class="pane-title">Memorial General Settings</h2>
+                    <p class="pane-desc">Customize names, dates, quotes, and privacy controls.</p>
+                </div>
+                <button type="submit" class="admin-btn-primary">Save All Settings</button>
+            </div>
+
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Aunt's Full Name</label>
+                    <input type="text" asp-for="Settings.AuntName" class="admin-input" required />
+                </div>
+                <div>
+                    <label class="admin-label">Memorial URL Slug (e.g. nanay or elena)</label>
+                    <input type="text" asp-for="Settings.MemorialSlug" class="admin-input" required />
+                </div>
+            </div>
+
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Date of Birth</label>
+                    <input type="text" asp-for="Settings.BirthDate" class="admin-input" />
+                </div>
+                <div>
+                    <label class="admin-label">Date of Passing</label>
+                    <input type="text" asp-for="Settings.PassingDate" class="admin-input" />
+                </div>
+            </div>
+
+            <div class="admin-field-row">
+                <label class="admin-label">Subtitle</label>
+                <input type="text" asp-for="Settings.Subtitle" class="admin-input" />
+            </div>
+
+            <hr class="admin-divider" />
+
+            <h3 class="admin-section-subtitle">Cinematic Quotes</h3>
+
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Opening Quote Line 1</label>
+                    <input type="text" asp-for="Settings.OpeningQuote1" class="admin-input" />
+                </div>
+                <div>
+                    <label class="admin-label">Opening Quote Line 2</label>
+                    <input type="text" asp-for="Settings.OpeningQuote2" class="admin-input" />
+                </div>
+            </div>
+
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Hero Quote 1</label>
+                    <input type="text" asp-for="Settings.HeroQuote1" class="admin-input" />
+                </div>
+                <div>
+                    <label class="admin-label">Hero Quote 2</label>
+                    <input type="text" asp-for="Settings.HeroQuote2" class="admin-input" />
+                </div>
+            </div>
+
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Reveal Quote 1 (Darkness)</label>
+                    <input type="text" asp-for="Settings.RevealQuote1" class="admin-input" />
+                </div>
+                <div>
+                    <label class="admin-label">Reveal Quote 2 (After Photo)</label>
+                    <input type="text" asp-for="Settings.RevealQuote2" class="admin-input" />
+                </div>
+            </div>
+
+            <hr class="admin-divider" />
+
+            <h3 class="admin-section-subtitle">Privacy & Security</h3>
+
+            <div class="admin-field-row">
+                <label class="admin-checkbox-label">
+                    <input type="checkbox" asp-for="Settings.IsPasswordProtected" />
+                    <span>Require Visitor Password to view memorial</span>
+                </label>
+            </div>
+
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Visitor Password (if enabled)</label>
+                    <input type="text" asp-for="Settings.VisitorPassword" class="admin-input" placeholder="Leave empty for public NFC tap" />
+                </div>
+                <div>
+                    <label class="admin-label">Admin Password (to access this panel)</label>
+                    <input type="text" asp-for="Settings.AdminPassword" class="admin-input" required />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Upload Photo Modal -->
+<div id="uploadModal" class="admin-modal" style="display:none;">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Upload Photograph</h3>
+            <button class="modal-close" onclick="document.getElementById('uploadModal').style.display='none'">✕</button>
+        </div>
+        <form asp-action="UploadPhoto" method="post" enctype="multipart/form-data" class="modal-form">
+            @Html.AntiForgeryToken()
+            <div class="admin-field-row">
+                <label class="admin-label">Select Image File (JPG, PNG, WebP)</label>
+                <input type="file" name="PhotoFile" class="admin-input-file" accept="image/*" required />
+            </div>
+            <div class="admin-field-row">
+                <label class="admin-label">Caption / Memory Reflection</label>
+                <textarea name="Caption" class="admin-textarea" rows="2" placeholder="e.g. One ordinary afternoon. Her unforgettable smile."></textarea>
+            </div>
+            <div class="admin-grid-2">
+                <div>
+                    <label class="admin-label">Memory Date / Period</label>
+                    <input type="text" name="MemoryDate" class="admin-input" placeholder="e.g. Summer 2024" />
+                </div>
+                <div>
+                    <label class="admin-label">Location</label>
+                    <input type="text" name="Location" class="admin-input" placeholder="e.g. Manila, Philippines" />
+                </div>
+            </div>
+            <div class="admin-field-row">
+                <label class="admin-label">Assign to Chapter</label>
+                <select name="Chapter" class="admin-select">
+                    <option value="Hero">Hero Section (Opening Portrait)</option>
+                    <option value="Chapter1">Chapter 1 — Her</option>
+                    <option value="Chapter2" selected>Chapter 2 — The Moments (Vertical Stream)</option>
+                    <option value="Chapter3">Chapter 3 — The People She Loved (Layered Parallax)</option>
+                    <option value="Reveal">Photo Reveal (Emerging From Darkness)</option>
+                    <option value="Final">Final Photo Section</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="admin-btn-secondary" onclick="document.getElementById('uploadModal').style.display='none'">Cancel</button>
+                <button type="submit" class="admin-btn-primary">Upload Photo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Memory Modal -->
+<div id="addMemoryModal" class="admin-modal" style="display:none;">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Add Personal Memory</h3>
+            <button class="modal-close" onclick="document.getElementById('addMemoryModal').style.display='none'">✕</button>
+        </div>
+        <form asp-action="SaveMemory" method="post" class="modal-form">
+            @Html.AntiForgeryToken()
+            <div class="admin-field-row">
+                <label class="admin-label">Memory Title</label>
+                <input type="text" name="Title" class="admin-input" placeholder="e.g. Her Laugh, The Way She Called My Name" required />
+            </div>
+            <div class="admin-field-row">
+                <label class="admin-label">Category / Tag</label>
+                <input type="text" name="Category" class="admin-input" placeholder="e.g. Her Voice, Her Kitchen, Wisdom, Laughter" />
+            </div>
+            <div class="admin-field-row">
+                <label class="admin-label">Personal Reflection</label>
+                <textarea name="Content" class="admin-textarea" rows="3" placeholder="Describe the memory in your own personal words..." required></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="admin-btn-secondary" onclick="document.getElementById('addMemoryModal').style.display='none'">Cancel</button>
+                <button type="submit" class="admin-btn-primary">Save Memory</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+}
+
+function copyNfcUrl(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        alert("NFC URL copied to clipboard: " + url);
+    });
+}
+</script>
