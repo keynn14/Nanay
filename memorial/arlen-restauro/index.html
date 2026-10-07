@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="theme-color" content="#fcfbf9" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Arlen Restauro — In Loving Memory</title>
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Alex+Brush&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./css/memorial.css" />
+</head>
+<body class="memorial-body">
+    <!-- Subtle Film Grain Canvas Overlay -->
+    <canvas id="film-grain-canvas" class="grain-overlay" aria-hidden="true"></canvas>
+    
+    <!-- Ambient Vignette -->
+    <div class="vignette-overlay" aria-hidden="true"></div>
+
+    <main role="main" id="main-content">
+        <div class="memorial-container" id="memorial-app">
+
+            <!-- 01. OPENING EXPERIENCE (NFC TAP & SILENCE) -->
+            <section class="section-opening" id="section-opening">
+                <div class="opening-content">
+                    <p class="opening-line line-1">Some people leave footprints on our hearts...</p>
+                    <p class="opening-line line-2">...that time can never erase.</p>
+                    
+                    <div class="opening-name-block">
+                        <span class="opening-divider">✦</span>
+                        <h1 class="opening-name">Arlen Restauro</h1>
+                        <p class="opening-subtitle">Forever loved. Forever remembered.</p>
+                    </div>
+
+                    <div class="scroll-indicator" id="scrollPrompt">
+                        <span class="scroll-text">Gently scroll to remember</span>
+                        <div class="scroll-line"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 02. HERO SECTION -->
+            <section class="section-hero" id="section-hero">
+                <div class="hero-parallax-bg" style="background-image: url('./uploads/portrait-formal.png')"></div>
+                <div class="hero-image-wrapper">
+                    <img src="./uploads/portrait-formal.png" alt="Arlen Restauro" class="hero-portrait" id="heroPortrait" loading="eager" />
+                    <div class="hero-image-vignette"></div>
+                </div>
+
+                <div class="hero-text-block">
+                    <p class="hero-quote-1">Your story did not end here.</p>
+                    <p class="hero-quote-2">It continues in everyone who remembers you.</p>
+                </div>
+            </section>
+
+            <!-- 03. CHAPTER 1 — HER -->
+            <section class="section-chapter section-chapter-1" id="chapter-1">
+                <div class="chapter-header">
+                    <span class="chapter-num">CHAPTER I</span>
+                    <h2 class="chapter-title">HER</h2>
+                    <div class="chapter-quote-box">
+                        <p class="chapter-quote">Before she became a memory,<br/>she was a person who made ordinary moments special.</p>
+                    </div>
+                </div>
+
+                <div class="chapter-portrait-showcase">
+                    <div class="portrait-card" data-parallax="0.15">
+                        <div class="card-image-frame">
+                            <img src="./uploads/home-smile.png" alt="Arlen Restauro smiling warmly at home" class="memorial-img" loading="lazy" />
+                        </div>
+                        <div class="card-caption-block">
+                            <span class="photo-date">Sunday Afternoon</span>
+                            <p class="photo-caption">Her vibrant energy lighting up the home in her favorite floral dress.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 04. CHAPTER 2 — THE MOMENTS (VERTICAL PARALLAX GALLERY) -->
+            <section class="section-chapter section-chapter-2" id="chapter-2">
+                <div class="chapter-header">
+                    <span class="chapter-num">CHAPTER II</span>
+                    <h2 class="chapter-title">THE MOMENTS</h2>
+                    <div class="chapter-quote-box">
+                        <p class="chapter-quote">One ordinary afternoon.<br/>One memory we would give anything to experience again.</p>
+                    </div>
+                </div>
+
+                <div class="moments-vertical-stream">
+                    <div class="moment-item align-left" data-parallax-speed="0.2">
+                        <div class="moment-frame">
+                            <img src="./uploads/beach-surfboard.jpg" alt="Summer getaway by the sea" class="moment-img" loading="lazy" />
+                            <div class="moment-overlay"></div>
+                        </div>
+                        <div class="moment-info">
+                            <span class="moment-date">Summer Getaway</span>
+                            <span class="moment-location">📍 By the Sea</span>
+                            <p class="moment-caption">Sunshine, gentle ocean breezes, and a carefree afternoon by the sea.</p>
+                        </div>
+                    </div>
+
+                    <div class="moment-item align-right" data-parallax-speed="0.3">
+                        <div class="moment-frame">
+                            <img src="./uploads/peace-sign-home.jpg" alt="Playful moment at home" class="moment-img" loading="lazy" />
+                            <div class="moment-overlay"></div>
+                        </div>
+                        <div class="moment-info">
+                            <span class="moment-date">Home Sweet Home</span>
+                            <span class="moment-location">📍 Home</span>
+                            <p class="moment-caption">Playful moments, shared laughter, and warmth that made every day bright.</p>
+                        </div>
+                    </div>
+
+                    <div class="moment-item align-left" data-parallax-speed="0.25">
+                        <div class="moment-frame">
+                            <img src="./uploads/strawberries-sunshine.jpg" alt="Strawberry harvest smile" class="moment-img" loading="lazy" />
+                            <div class="moment-overlay"></div>
+                        </div>
+                        <div class="moment-info">
+                            <span class="moment-date">Farm Visit</span>
+                            <span class="moment-location">📍 Strawberry Farm</span>
+                            <p class="moment-caption">Joy in the simple things. A basket of freshly picked strawberries and her unforgettable warmth.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 05. CHAPTER 3 — THE PEOPLE SHE LOVED (FEATURE & LAYERED PARALLAX) -->
+            <section class="section-chapter section-chapter-3" id="chapter-3">
+                <div class="chapter-header">
+                    <span class="chapter-num">CHAPTER III</span>
+                    <h2 class="chapter-title">THE PEOPLE SHE LOVED</h2>
+                    <div class="chapter-quote-box">
+                        <p class="chapter-quote quote-line-1">She was part of our lives in ways we didn't always notice.</p>
+                        <p class="chapter-quote quote-line-2">Until we had to imagine life without her.</p>
+                    </div>
+                </div>
+
+                <!-- Wide Family Gathering Feature Card -->
+                <div class="family-panorama-card">
+                    <div class="panorama-frame">
+                        <img src="./uploads/family-gathering-viewpoint.png" alt="Big family gathering on scenic mountain overlook" class="panorama-img" loading="lazy" />
+                    </div>
+                    <div class="panorama-caption-block">
+                        <span class="photo-date">Family Reunion & Gathering</span>
+                        <p class="panorama-caption">Surrounded by all the family, children, and loved ones whose lives were touched by her boundless love.</p>
+                    </div>
+                </div>
+
+                <div class="layered-photos-stage" id="layeredStage">
+                    <div class="layer-card layer-1" data-depth="0.2">
+                        <div class="layer-image-wrapper">
+                            <img src="./uploads/birds-park-together.jpg" alt="Avian park visit with birds" class="layer-img" loading="lazy" />
+                        </div>
+                        <div class="layer-meta">
+                            <span class="layer-date">Avian Sanctuary Visit</span>
+                            <p class="layer-text">Surrounded by color and laughter. A joyful afternoon together with the birds.</p>
+                        </div>
+                    </div>
+
+                    <div class="layer-card layer-2" data-depth="0.4">
+                        <div class="layer-image-wrapper">
+                            <img src="./uploads/emerald-dress-couple.jpg" alt="Side by side in green dress" class="layer-img" loading="lazy" />
+                        </div>
+                        <div class="layer-meta">
+                            <span class="layer-date">Celebration of Love</span>
+                            <p class="layer-text">Side by side through every season of life.</p>
+                        </div>
+                    </div>
+
+                    <div class="layer-card layer-3" data-depth="0.6">
+                        <div class="layer-image-wrapper">
+                            <img src="./uploads/navy-jumpsuit-smile.jpg" alt="Outdoors arm in arm" class="layer-img" loading="lazy" />
+                        </div>
+                        <div class="layer-meta">
+                            <span class="layer-date">Weekend Outing</span>
+                            <p class="layer-text">Arm in arm, smiling through every journey.</p>
+                        </div>
+                    </div>
+
+                    <div class="layer-card layer-4" data-depth="0.8">
+                        <div class="layer-image-wrapper">
+                            <img src="./uploads/church-altar-blessing.png" alt="Church blessing in front of altar" class="layer-img" loading="lazy" />
+                        </div>
+                        <div class="layer-meta">
+                            <span class="layer-date">Sunday Mass & Blessing</span>
+                            <p class="layer-text">A shared foundation of faith, quiet prayers, and enduring devotion.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 06. PERSONAL MEMORIES ("Things I Will Always Remember") -->
+            <section class="section-memories" id="section-memories">
+                <div class="memories-header">
+                    <span class="memories-badge">TREASURED REFLECTIONS</span>
+                    <h2 class="memories-title">Things I Will Always Remember</h2>
+                    <p class="memories-subtitle">The quiet moments, the laughter, and the warmth that live in our minds forever.</p>
+                </div>
+
+                <div class="memories-stream">
+                    <div class="memory-card-reveal">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-header">
+                                <span class="memory-tag">Her Spirit</span>
+                                <span class="memory-glyph">✦</span>
+                            </div>
+                            <h3 class="memory-item-title">Her Unmistakable Laugh</h3>
+                            <p class="memory-item-content">She had a laugh that could fill any quiet room with instant warmth. Even during hard days, she would find a way to make everyone smile.</p>
+                        </div>
+                    </div>
+
+                    <div class="memory-card-reveal">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-header">
+                                <span class="memory-tag">Voice & Warmth</span>
+                                <span class="memory-glyph">✦</span>
+                            </div>
+                            <h3 class="memory-item-title">The Way She Called My Name</h3>
+                            <p class="memory-item-content">A gentle, affectionate voice that immediately meant you were safe, loved, and never alone.</p>
+                        </div>
+                    </div>
+
+                    <div class="memory-card-reveal">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-header">
+                                <span class="memory-tag">Her Kitchen</span>
+                                <span class="memory-glyph">✦</span>
+                            </div>
+                            <h3 class="memory-item-title">Her Warm Kitchen & Signature Dishes</h3>
+                            <p class="memory-item-content">No one ever left her home hungry. She cooked with all her heart, serving each meal with love that felt like a warm embrace.</p>
+                        </div>
+                    </div>
+
+                    <div class="memory-card-reveal">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-header">
+                                <span class="memory-tag">Music & Song</span>
+                                <span class="memory-glyph">✦</span>
+                            </div>
+                            <h3 class="memory-item-title">Her Favorite Melody: 500 Miles</h3>
+                            <p class="memory-item-content">She loved listening to "500 Miles" by Peter, Paul and Mary, humming along to its gentle acoustic harmony that filled the home with peace.</p>
+                        </div>
+                    </div>
+
+                    <div class="memory-card-reveal">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-header">
+                                <span class="memory-tag">Words of Wisdom</span>
+                                <span class="memory-glyph">✦</span>
+                            </div>
+                            <h3 class="memory-item-title">Something She Always Said</h3>
+                            <p class="memory-item-content">"Huwag kang mag-alala, magiging maayos din ang lahat." (Do not worry, everything will be alright.) Words of comfort we hold onto forever.</p>
+                        </div>
+                    </div>
+
+                    <div class="memory-card-reveal">
+                        <div class="memory-card-inner">
+                            <div class="memory-card-header">
+                                <span class="memory-tag">Life Lesson</span>
+                                <span class="memory-glyph">✦</span>
+                            </div>
+                            <h3 class="memory-item-title">A Lesson She Taught Me</h3>
+                            <p class="memory-item-content">To always choose kindness, even when the world makes it difficult, and to always hold your family close.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 07. PHOTO REVEAL EFFECT (EMERGING FROM ETHEREAL MIST) -->
+            <section class="section-reveal" id="section-reveal">
+                <div class="reveal-backdrop"></div>
+                <div class="reveal-container">
+                    <p class="reveal-pre-text">Some memories are too precious to explain.</p>
+                    
+                    <div class="reveal-image-container" id="revealImageContainer">
+                        <img src="./uploads/aquarium-memory.jpg" alt="Unspoken precious memory by the aquarium" class="reveal-photo" id="revealPhoto" loading="lazy" />
+                        <div class="reveal-shroud" id="revealShroud"></div>
+                    </div>
+
+                    <p class="reveal-post-text">I wish I could go back to this moment.</p>
+                </div>
+            </section>
+
+            <!-- 08. HER VOICE / MUSIC (AUDIO SECTION — 500 MILES) -->
+            <section class="section-audio" id="section-audio">
+                <div class="audio-container">
+                    <div class="audio-icon-glow">
+                        <span class="audio-pulse-ring"></span>
+                        <button class="audio-toggle-btn" id="audioToggleBtn" aria-label="Play 500 Miles">
+                            <svg class="play-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg class="pause-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="audio-text-wrap">
+                        <span class="audio-tag">HER FAVORITE SONG</span>
+                        <h3 class="audio-title">500 Miles — Peter, Paul and Mary</h3>
+                        <p class="audio-prompt">
+                            Press play if you want to listen to 500 Miles, her favorite song.
+                        </p>
+                    </div>
+
+                    <!-- Waveform Visualizer simulation -->
+                    <div class="waveform-bars" id="waveformBars" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+
+                    <audio id="memorialAudio" preload="none" src="./audio/500-miles.mp3"></audio>
+                </div>
+            </section>
+
+            <!-- 09. LETTER TO HER -->
+            <section class="section-letter" id="section-letter">
+                <div class="letter-scroll-wrapper">
+                    <div class="letter-header">
+                        <span class="letter-seal">✦</span>
+                        <h2 class="letter-title">If I Could Tell You One More Thing...</h2>
+                    </div>
+
+                    <div class="letter-paper">
+                        <p class="letter-paragraph letter-p1">There are moments when silence fills the room, and all I can think about is your laugh, your voice, and how you made everyone feel so safe and welcomed.</p>
+                        <p class="letter-paragraph letter-p2">You taught us what unconditional love looks like. You never asked for anything in return, yet you gave everything you had—your time, your prayers, your radiant warmth, and your endless kindness.</p>
+                        <p class="letter-paragraph letter-p3">If love alone could have kept you with us, you would have lived forever. We miss you deeply, but every single day we will live with the love and courage you gave us.</p>
+
+                        <div class="letter-signoff">
+                            <p class="signoff-line line-1">I love you.</p>
+                            <p class="signoff-line line-2">I miss you.</p>
+                            <p class="signoff-line line-3">Thank you for being part of my life.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. FINAL PHOTO -->
+            <section class="section-final-photo" id="section-final-photo">
+                <div class="final-photo-wrapper">
+                    <img src="./uploads/strawberries-sunshine.jpg" alt="In eternal memory" class="final-photo-img" loading="lazy" />
+                    <div class="final-photo-gradient"></div>
+                </div>
+
+                <div class="final-quotes-wrapper">
+                    <p class="final-quote q1">You may be gone from our sight...</p>
+                    <p class="final-quote q2">...but never from our lives.</p>
+                    <p class="final-quote q3">Until we meet again.</p>
+                </div>
+            </section>
+
+            <!-- 11. FINAL GOODBYE & DEDICATION FOOTER -->
+            <section class="section-goodbye" id="section-goodbye">
+                <div class="goodbye-content">
+                    <div class="goodbye-cross">✦</div>
+                    <h2 class="goodbye-name">Arlen Restauro</h2>
+                    <p class="goodbye-dates">July 3, 1999 &mdash; September 28, 2026</p>
+                    <p class="goodbye-tribute">Forever in our hearts.</p>
+
+                    <div class="goodbye-candle">
+                        <div class="flame"></div>
+                        <div class="candle-base"></div>
+                    </div>
+
+                    <div class="goodbye-spacer"></div>
+
+                    <!-- CLEAN WEBSITE FOOTER (NO ADMIN LOGIN) -->
+                    <footer class="memorial-site-footer">
+                        <div class="footer-symbol">✦</div>
+                        <p class="footer-dedication">Lovingly created and remembered by her family & loved ones</p>
+                        <p class="footer-blessing">"Those we love don't go away, they walk beside us every day."</p>
+                    </footer>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- GSAP & ScrollTrigger Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="./js/memorial.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/memorial/:slug*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tap",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nfc",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
