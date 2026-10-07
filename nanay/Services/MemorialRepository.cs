@@ -89,12 +89,12 @@ public class MemorialRepository : IMemorialRepository
             RevealQuote1 = "Some memories are too precious to explain.",
             RevealQuote2 = "I wish I could go back to this moment.",
             RevealImage = "/uploads/aquarium-memory.jpg",
-            EnableMusic = true,
-            AudioPath = "/audio/500-miles.mp3",
-            AudioTitle = "500 Miles — Peter, Paul and Mary",
-            AudioPromptText = "Press play if you want to listen to 500 Miles, her favorite song.",
+            EnableMusic = false,
+            AudioPath = "",
+            AudioTitle = "",
+            AudioPromptText = "",
             IsVoiceRecording = false,
-            VoicePromptText = "A voice we wish we could hear one more time.",
+            VoicePromptText = "",
             LetterTitle = "If I Could Tell You One More Thing...",
             LetterParagraph1 = "There are moments when silence fills the room, and all I can think about is your laugh, your voice, and how you made everyone feel so safe and welcomed.",
             LetterParagraph2 = "You taught us what unconditional love looks like. You never asked for anything in return, yet you gave everything you had—your time, your prayers, your radiant warmth, and your endless kindness.",
@@ -287,26 +287,18 @@ public class MemorialRepository : IMemorialRepository
             new MemoryEntry
             {
                 Id = "m4",
-                Title = "Her Favorite Melody: 500 Miles",
-                Content = "She loved listening to \"500 Miles\" by Peter, Paul and Mary, humming along to its gentle acoustic harmony that filled the home with peace.",
-                Category = "Music & Song",
+                Title = "Something She Always Said",
+                Content = "\"Huwag kang mag-alala, magiging maayos din ang lahat.\" (Do not worry, everything will be alright.) Words of comfort we hold onto forever.",
+                Category = "Words of Wisdom",
                 DisplayOrder = 4
             },
             new MemoryEntry
             {
                 Id = "m5",
-                Title = "Something She Always Said",
-                Content = "\"Huwag kang mag-alala, magiging maayos din ang lahat.\" (Do not worry, everything will be alright.) Words of comfort we hold onto forever.",
-                Category = "Words of Wisdom",
-                DisplayOrder = 5
-            },
-            new MemoryEntry
-            {
-                Id = "m6",
                 Title = "A Lesson She Taught Me",
                 Content = "To always choose kindness, even when the world makes it difficult, and to always hold your family close.",
                 Category = "Life Lesson",
-                DisplayOrder = 6
+                DisplayOrder = 5
             }
         };
 

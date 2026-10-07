@@ -36,11 +36,11 @@ public class MemorialSettings
     public string RevealQuote2 { get; set; } = "I wish I could go back to this moment.";
     public string RevealImage { get; set; } = "/uploads/aquarium-memory.jpg";
     
-    // Audio / Voice Section (500 Miles by Peter, Paul and Mary)
-    public bool EnableMusic { get; set; } = true;
-    public string AudioPath { get; set; } = "/audio/500-miles.mp3";
-    public string AudioTitle { get; set; } = "500 Miles — Peter, Paul and Mary";
-    public string AudioPromptText { get; set; } = "Press play if you want to listen to 500 Miles, her favorite song.";
+    // Audio / Voice Section
+    public bool EnableMusic { get; set; } = false;
+    public string AudioPath { get; set; } = "";
+    public string AudioTitle { get; set; } = "";
+    public string AudioPromptText { get; set; } = "";
     public bool IsVoiceRecording { get; set; } = false;
     public string VoicePromptText { get; set; } = "A voice we wish we could hear one more time.";
     
